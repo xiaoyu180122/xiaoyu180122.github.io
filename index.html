@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神秘礼物 - 惊喜礼物网站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transition: all 0.3s ease;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+        
+        .button-container {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            position: absolute;
+        }
+        
+        #yesBtn {
+            background: #4CAF50;
+            color: white;
+            left: 50%;
+            transform: translateX(-150%);
+        }
+        
+        #yesBtn:hover {
+            background: #45a049;
+            transform: translateX(-150%) scale(1.05);
+        }
+        
+        #noBtn {
+            background: #f44336;
+            color: white;
+            left: 50%;
+            transform: translateX(50%);
+        }
+        
+        #noBtn:hover {
+            background: #d32f2f;
+            transform: translateX(50%) scale(1.05);
+        }
+        
+        .gift-box {
+            width: 200px;
+            height: 200px;
+            margin: 30px auto;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .gift-box:hover {
+            transform: scale(1.1);
+        }
+        
+        .gift-box.open .lid {
+            animation: openLid 0.5s ease-out forwards;
+        }
+        
+        @keyframes openLid {
+            0% {
+                transform: rotate(-5deg);
+                top: -10px;
+            }
+            100% {
+                transform: rotate(45deg);
+                top: -40px;
+                left: 20%;
+            }
+        }
+        
+        .box {
+            width: 100%;
+            height: 160px;
+            background: #ff6b6b;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 45%;
+            width: 10%;
+            height: 100%;
+            background: #ff8787;
+        }
+        
+        .lid {
+            width: 110%;
+            height: 50px;
+            background: #ff5252;
+            position: absolute;
+            top: -10px;
+            left: -5%;
+            border-radius: 5px;
+            transform: rotate(-5deg);
+            transition: all 0.3s ease;
+        }
+        
+        .lid::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 45%;
+            width: 10%;
+            height: 100%;
+            background: #ff7979;
+            transform: translateY(-50%);
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .spider {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="10" fill="black"/><line x1="50" y1="10" x2="50" y2="0" stroke="black" stroke-width="2"/><line x1="50" y1="90" x2="50" y2="100" stroke="black" stroke-width="2"/><line x1="10" y1="50" x2="0" y2="50" stroke="black" stroke-width="2"/><line x1="90" y1="50" x2="100" y2="50" stroke="black" stroke-width="2"/><line x1="25" y1="25" x2="10" y2="10" stroke="black" stroke-width="2"/><line x1="75" y1="25" x2="90" y2="10" stroke="black" stroke-width="2"/><line x1="25" y1="75" x2="10" y2="90" stroke="black" stroke-width="2"/><line x1="75" y1="75" x2="90" y2="90" stroke="black" stroke-width="2"/></svg>') no-repeat center;
+            background-size: contain;
+            pointer-events: none;
+            z-index: 1000;
+            animation: spider 2s ease-out forwards;
+        }
+        
+        @keyframes spider {
+            0% {
+                transform: translateY(-100vh) scale(0.1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(50vh) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .scary-face {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 500px;
+            height: 500px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%232c3e50"/><circle cx="35" cy="35" r="10" fill="%23ff0000"/><circle cx="65" cy="35" r="10" fill="%23ff0000"/><circle cx="35" cy="35" r="4" fill="%23000000"/><circle cx="65" cy="35" r="4" fill="%23000000"/><path d="M20,60 Q50,85 80,60" stroke="%23ff0000" stroke-width="6" fill="none"/><path d="M30,70 L40,75 M60,75 L70,70" stroke="%23ff0000" stroke-width="3" fill="none"/><path d="M25,25 L35,35 M65,35 L75,25" stroke="%23ff0000" stroke-width="2" fill="none"/><path d="M30,45 L40,45 M60,45 L70,45" stroke="%23ff0000" stroke-width="2" fill="none"/><path d="M20,40 Q30,50 20,60" stroke="%23ff0000" stroke-width="2" fill="none"/><path d="M80,40 Q70,50 80,60" stroke="%23ff0000" stroke-width="2" fill="none"/></svg>') no-repeat center;
+            background-size: contain;
+            z-index: 9999;
+            filter: drop-shadow(0 0 30px #ff0000);
+            pointer-events: none;
+        }
+        
+        @keyframes scary {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        .blood-splatter {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50,10 Q30,30 20,50 Q30,70 50,90 Q70,70 80,50 Q70,30 50,10 Z" fill="#ff0000" opacity="0.8"/><path d="M30,20 Q20,40 10,60 Q20,80 40,90 Q60,80 70,60 Q60,40 50,20" fill="#ff0000" opacity="0.6"/><path d="M70,20 Q80,40 90,60 Q80,80 60,90 Q40,80 30,60 Q40,40 50,20" fill="#ff0000" opacity="0.4"/></svg>') no-repeat center;
+            background-size: contain;
+            pointer-events: none;
+            z-index: 1500;
+            animation: blood 0.5s ease-out forwards;
+        }
+        
+        @keyframes blood {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+        }
+        
+        .screen-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 3000;
+            opacity: 0;
+            animation: flash 0.5s ease-out forwards;
+        }
+        
+        @keyframes flash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        .screen-shake {
+            animation: screenShake 0.5s ease-in-out;
+        }
+        
+        @keyframes screenShake {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-10px); }
+            20% { transform: translateX(10px); }
+            30% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            50% { transform: translateX(-10px); }
+            60% { transform: translateX(10px); }
+            70% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+            90% { transform: translateX(-10px); }
+        }
+        
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <h1>🎁 神秘礼物 🎁</h1>
+        <p>你的好友给你准备了一份特别的礼物，点击打开看看吧！</p>
+        <p style="font-size: 1em; color: #888;">这是一个精心准备的惊喜，不要错过哦！</p>
+        
+        <div class="gift-box" id="giftBox">
+            <div class="lid"></div>
+            <div class="box"></div>
+        </div>
+        
+        <div class="message" id="message">点击礼物盒打开惊喜！</div>
+        
+        <div class="button-container">
+            <button id="yesBtn">打开</button>
+            <button id="noBtn">不要</button>
+        </div>
+    </div>
+    
+    <script>
+        // 获取DOM元素
+        const giftBox = document.getElementById('giftBox');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const message = document.getElementById('message');
+        const container = document.getElementById('container');
+        
+        // 生成随机颜色
+        function getRandomColor() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dfe6e9', '#e17055', '#00b894'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // 生成五彩纸屑
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
+                
+                // 3秒后移除纸屑
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+        
+        // 创建蜘蛛
+        function createSpider() {
+            const spider = document.createElement('div');
+            spider.className = 'spider';
+            spider.style.left = Math.random() * 80 + 10 + '%';
+            document.body.appendChild(spider);
+            
+            // 2秒后移除蜘蛛
+            setTimeout(() => {
+                spider.remove();
+            }, 3000);
+        }
+        
+        // 创建恐怖面孔
+        function createScaryFace() {
+            const face = document.createElement('div');
+            face.className = 'scary-face';
+            // 确保z-index最高
+            face.style.zIndex = '9999';
+            // 确保位置正确
+            face.style.position = 'fixed';
+            face.style.top = '50%';
+            face.style.left = '50%';
+            face.style.transform = 'translate(-50%, -50%) scale(0)';
+            document.body.appendChild(face);
+            
+            // 强制重排以确保动画触发
+            face.offsetHeight;
+            
+            // 触发动画
+            face.style.animation = 'scary 0.2s ease-out forwards';
+            
+            // 1秒后移除面孔
+            setTimeout(() => {
+                face.remove();
+            }, 2000);
+        }
+        
+        // 播放恐怖音效
+        function playScarySound() {
+            // 创建更恐怖的音效
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.5);
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.8, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+            
+            // 额外的恐怖音效
+            setTimeout(() => {
+                const oscillator2 = audioContext.createOscillator();
+                const gainNode2 = audioContext.createGain();
+                
+                oscillator2.connect(gainNode2);
+                gainNode2.connect(audioContext.destination);
+                
+                oscillator2.type = 'triangle';
+                oscillator2.frequency.setValueAtTime(300, audioContext.currentTime);
+                
+                gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
+                gainNode2.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.2);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                
+                oscillator2.start(audioContext.currentTime);
+                oscillator2.stop(audioContext.currentTime + 1);
+            }, 300);
+        }
+        
+        // 抖动效果
+        function shakeElement(element) {
+            element.classList.add('shake');
+            setTimeout(() => {
+                element.classList.remove('shake');
+            }, 500);
+        }
+        
+        // 屏幕闪烁效果
+        function createScreenFlash() {
+            const flash = document.createElement('div');
+            flash.className = 'screen-flash';
+            document.body.appendChild(flash);
+            
+            setTimeout(() => {
+                flash.remove();
+            }, 500);
+        }
+        
+        // 全局屏幕抖动
+        function shakeScreen() {
+            document.body.classList.add('screen-shake');
+            setTimeout(() => {
+                document.body.classList.remove('screen-shake');
+            }, 500);
+        }
+        
+        // 创建血液飞溅效果
+        function createBloodSplatter() {
+            for (let i = 0; i < 5; i++) {
+                const blood = document.createElement('div');
+                blood.className = 'blood-splatter';
+                blood.style.left = (Math.random() * 80 + 10) + '%';
+                blood.style.top = (Math.random() * 80 + 10) + '%';
+                blood.style.animationDelay = (Math.random() * 0.5) + 's';
+                document.body.appendChild(blood);
+                
+                setTimeout(() => {
+                    blood.remove();
+                }, 2000);
+            }
+        }
+        
+        // 移动"不要"按钮
+        function moveNoButton(e) {
+            // 阻止默认行为，防止按钮消失
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // 确保按钮始终可见
+            noBtn.style.display = 'inline-block';
+            noBtn.style.visibility = 'visible';
+            noBtn.style.opacity = '1';
+            noBtn.style.position = 'fixed';
+            noBtn.style.zIndex = '1000';
+            noBtn.style.transition = 'all 0.3s ease';
+            
+            // 获取按钮尺寸
+            const buttonRect = noBtn.getBoundingClientRect();
+            const buttonWidth = buttonRect.width;
+            const buttonHeight = buttonRect.height;
+            
+            // 使用视口尺寸确保按钮在屏幕内
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // 确保按钮在屏幕内，留有边距
+            const maxX = viewportWidth - buttonWidth - 20;
+            const maxY = viewportHeight - buttonHeight - 20;
+            
+            // 确保新位置在屏幕内
+            const newX = Math.max(20, Math.floor(Math.random() * maxX));
+            const newY = Math.max(20, Math.floor(Math.random() * maxY));
+            
+            // 使用固定定位相对于视口
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+            noBtn.style.transform = 'none';
+            
+            // 确保按钮始终在文档中
+            if (!document.body.contains(noBtn)) {
+                document.body.appendChild(noBtn);
+            }
+        }
+        
+        // 整蛊逻辑
+        function prank() {
+            // 首先打开礼物盒
+            giftBox.classList.add('open');
+            
+            // 播放打开礼物的声音
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.3);
+            
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+            
+            // 短暂延迟后触发惊吓效果
+            setTimeout(() => {
+                // 屏幕闪烁
+                createScreenFlash();
+                
+                // 播放恐怖音效
+                playScarySound();
+                
+                // 全局屏幕抖动
+                shakeScreen();
+                
+                // 生成纸屑
+                createConfetti();
+                
+                // 创建蜘蛛
+                createSpider();
+                
+                // 创建血液飞溅效果
+                createBloodSplatter();
+                
+                // 创建恐怖面孔（增强版）
+                createScaryFace();
+                
+                // 抖动容器
+                shakeElement(container);
+                
+                // 更改背景颜色为红色
+                document.body.style.background = 'linear-gradient(135deg, #ff4757 0%, #ff6b81 100%)';
+                
+                // 更新消息
+                message.textContent = '哈哈！你被整蛊了！';
+                message.style.color = '#ff4757';
+                message.style.fontSize = '1.5em';
+                message.style.fontWeight = 'bold';
+                
+                // 额外的惊吓效果
+                setTimeout(() => {
+                    createScaryFace();
+                    playScarySound();
+                    shakeScreen();
+                }, 500);
+            }, 600); // 等待礼物盒打开动画完成
+        }
+        
+        // 事件监听
+        yesBtn.addEventListener('click', prank);
+        giftBox.addEventListener('click', prank);
+        
+        // "不要"按钮移动效果 - 只在点击后移动
+        noBtn.addEventListener('click', function(e) {
+            moveNoButton(e);
+        });
+        
+        // 页面加载时的小动画
+        window.addEventListener('load', () => {
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.5s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
