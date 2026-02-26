@@ -504,17 +504,25 @@
             const buttonWidth = buttonRect.width;
             const buttonHeight = buttonRect.height;
             
-            // 使用视口尺寸确保按钮在屏幕内
+            // 使用视口尺寸
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
             
-            // 确保按钮在屏幕内，留有边距
-            const maxX = viewportWidth - buttonWidth - 20;
-            const maxY = viewportHeight - buttonHeight - 20;
+            // 限制移动范围在屏幕中间60%的区域
+            const centerX = viewportWidth / 2;
+            const centerY = viewportHeight / 2;
+            const rangeWidth = viewportWidth * 0.6;
+            const rangeHeight = viewportHeight * 0.6;
             
-            // 确保新位置在屏幕内
-            const newX = Math.max(20, Math.floor(Math.random() * maxX));
-            const newY = Math.max(20, Math.floor(Math.random() * maxY));
+            // 计算移动范围的边界
+            const minX = centerX - rangeWidth / 2 + buttonWidth / 2;
+            const maxX = centerX + rangeWidth / 2 - buttonWidth / 2;
+            const minY = centerY - rangeHeight / 2 + buttonHeight / 2;
+            const maxY = centerY + rangeHeight / 2 - buttonHeight / 2;
+            
+            // 确保新位置在限制范围内
+            const newX = Math.max(minX, Math.min(Math.floor(Math.random() * (maxX - minX)) + minX, maxX));
+            const newY = Math.max(minY, Math.min(Math.floor(Math.random() * (maxY - minY)) + minY, maxY));
             
             // 使用固定定位相对于视口
             noBtn.style.left = newX + 'px';
